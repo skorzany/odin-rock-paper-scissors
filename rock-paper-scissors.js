@@ -51,6 +51,8 @@ function calculateResult(humanChoice, computerChoice, ruleset) {
 // console.assert(calculateResult("scissors", "paper", rules) === 1, "SCISSORS win error");
 
 
+const wordCase = word => word[0].toUpperCase() + word.substr(1);
+
 function playRound(humanChoice, computerChoice) {
     while (humanChoice === null) {
         alert("Your choice was invalid! Try again.");
@@ -66,23 +68,13 @@ function playRound(humanChoice, computerChoice) {
     const result = calculateResult(humanChoice, computerChoice, rules);
     switch (result) {
         case -1:
-            msg = `You lose! ${
-                computerChoice[0].toUpperCase() + computerChoice.substr(1)
-            } beats ${
-                humanChoice[0].toUpperCase() + humanChoice.substr(1)
-            }`;
+            msg = `You lose! ${wordCase(computerChoice)} beats ${humanChoice}.`;
             break;
         case 0:
-            msg = `It's a tie! You both chose ${
-                humanChoice[0].toUpperCase() + humanChoice.substr(1)
-            }`;
+            msg = `It's a tie! You both chose ${humanChoice}.`;
             break;
         case 1:
-            msg = `You win! ${
-                humanChoice[0].toUpperCase() + humanChoice.substr(1)
-            } beats ${
-                computerChoice[0].toUpperCase() + computerChoice.substr(1)
-            }`;
+            msg = `You win! ${wordCase(humanChoice)} beats ${computerChoice}.`;
             break;
     }
 
@@ -90,8 +82,8 @@ function playRound(humanChoice, computerChoice) {
 }
 
 // tests for playRound
-console.assert(playRound("paper", "paper") === "It's a tie! You both chose Paper", "paper tie error");
-console.assert(playRound("rock", "rock") === "It's a tie! You both chose Rock", "rock tie error");
-console.assert(playRound("scissors", "scissors") === "It's a tie! You both chose Scissors", "scissors tie error");
+console.assert(playRound("paper", "paper") === "It's a tie! You both chose paper.", "paper tie error");
+console.assert(playRound("rock", "rock") === "It's a tie! You both chose rock.", "rock tie error");
+console.assert(playRound("scissors", "scissors") === "It's a tie! You both chose scissors.", "scissors tie error");
 
 console.log(playRound(getHumanChoice(), getComputerChoice()));
