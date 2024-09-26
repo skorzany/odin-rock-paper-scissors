@@ -51,7 +51,7 @@ function calculateResult(humanChoice, computerChoice, ruleset) {
 // console.assert(calculateResult("scissors", "paper", rules) === 1, "SCISSORS win error");
 
 
-const wordCase = word => word[0].toUpperCase() + word.substr(1);
+const setCase = word => word[0].toUpperCase() + word.substr(1);
 
 function playRound(humanChoice, computerChoice) {
     while (humanChoice === null) {
@@ -68,22 +68,52 @@ function playRound(humanChoice, computerChoice) {
     const result = calculateResult(humanChoice, computerChoice, rules);
     switch (result) {
         case -1:
-            msg = `You lose! ${wordCase(computerChoice)} beats ${humanChoice}.`;
+            msg = `You lose! ${setCase(computerChoice)} beats ${humanChoice}.`;
             break;
         case 0:
             msg = `It's a tie! You both chose ${humanChoice}.`;
             break;
         case 1:
-            msg = `You win! ${wordCase(humanChoice)} beats ${computerChoice}.`;
+            msg = `You win! ${setCase(humanChoice)} beats ${computerChoice}.`;
             break;
     }
 
-    return msg;
+    console.warn(msg);
+    return result;
 }
 
-// tests for playRound
-console.assert(playRound("paper", "paper") === "It's a tie! You both chose paper.", "paper tie error");
-console.assert(playRound("rock", "rock") === "It's a tie! You both chose rock.", "rock tie error");
-console.assert(playRound("scissors", "scissors") === "It's a tie! You both chose scissors.", "scissors tie error");
+// // tests for playRound
+// console.assert(playRound("paper", "paper") === "It's a tie! You both chose paper.", "paper tie error");
+// console.assert(playRound("rock", "rock") === "It's a tie! You both chose rock.", "rock tie error");
+// console.assert(playRound("scissors", "scissors") === "It's a tie! You both chose scissors.", "scissors tie error");
 
-console.log(playRound(getHumanChoice(), getComputerChoice()));
+// console.log(playRound(getHumanChoice(), getComputerChoice()));
+
+
+function playGame() {
+    let rounds = 0;
+    let player_score = 0;
+    let cpu_score = 0;
+    let player_pick;
+    let cpu_pick;
+
+    console.info("Welcome to the game of Rock, Paper, Scissors!");
+    console.info("The game will take 5 rounds, good luck!");
+
+    while (rounds < 5) {
+        console.info(`Round ${++rounds}`);
+        player_pick = getHumanChoice();
+        cpu_pick = getComputerChoice();
+        result = playRound(player_pick, cpu_pick);
+        (result === 1) ? player_score++ : ((result === -1) ? cpu_score++ : null);
+        console.info(`Current score (round ${rounds}/5):
+            Player: ${player_score}, CPU: ${cpu_score}`);
+    }
+
+    console.error(`The final score is:
+        Player: ${player_score}, CPU: ${cpu_score}.`);
+    console.log("Thank you for playing!");
+}
+
+
+playGame();
