@@ -106,11 +106,12 @@ function playGame() {
         player_pick = getHumanChoice();
         cpu_pick = getComputerChoice();
         result = playRound(player_pick, cpu_pick);
+
         (result === 1) ? player_score++
-                        : (result === -1) ? cpu_score++
-                        : null;
-        console.info(`Current score (round ${currentRound}/5):
-            Player: ${player_score}, CPU: ${cpu_score}`);
+        : (result === -1) ? cpu_score++
+        : null;
+
+        console.info(`Current score (round ${currentRound}/5):\n\tPlayer: ${player_score}, CPU: ${cpu_score}`);
     }
 
     console.error(`The final score is:\n\tPlayer: ${player_score}, CPU: ${cpu_score}.`);
