@@ -54,18 +54,18 @@ function calculateResult(humanChoice, computerChoice, ruleset) {
 const setCase = word => word[0].toUpperCase() + word.substr(1);
 
 function playRound(humanChoice, computerChoice) {
-    while (humanChoice === null) {
-        alert("Your choice was invalid! Try again.");
-        humanChoice = getHumanChoice();
-    }
-
-    const rules = new Map([
+    const RULES = new Map([
         ["rock", "prs"],
         ["paper", "spr"],
         ["scissors", "rsp"],
     ]);
 
-    const result = calculateResult(humanChoice, computerChoice, rules);
+    while (humanChoice === null) {
+        alert("Your choice was invalid! Try again.");
+        humanChoice = getHumanChoice();
+    }
+
+    const result = calculateResult(humanChoice, computerChoice, RULES);
     switch (result) {
         case -1:
             msg = `You lose! ${setCase(computerChoice)} beats ${humanChoice}.`;
@@ -91,27 +91,29 @@ function playRound(humanChoice, computerChoice) {
 
 
 function playGame() {
-    let rounds = 0;
+    let currentRound = 0;
     let player_score = 0;
     let cpu_score = 0;
     let player_pick;
     let cpu_pick;
+    const ROUNDS = 5;
 
     console.info("Welcome to the game of Rock, Paper, Scissors!");
     console.info("The game will take 5 rounds, good luck!");
 
-    while (rounds < 5) {
-        console.info(`Round ${++rounds}`);
+    while (currentRound < ROUNDS) {
+        console.info(`Round ${++currentRound}`);
         player_pick = getHumanChoice();
         cpu_pick = getComputerChoice();
         result = playRound(player_pick, cpu_pick);
-        (result === 1) ? player_score++ : ((result === -1) ? cpu_score++ : null);
-        console.info(`Current score (round ${rounds}/5):
+        (result === 1) ? player_score++
+                        : (result === -1) ? cpu_score++
+                        : null;
+        console.info(`Current score (round ${currentRound}/5):
             Player: ${player_score}, CPU: ${cpu_score}`);
     }
 
-    console.error(`The final score is:
-        Player: ${player_score}, CPU: ${cpu_score}.`);
+    console.error(`The final score is:\n\tPlayer: ${player_score}, CPU: ${cpu_score}.`);
     console.log("Thank you for playing!");
 }
 
