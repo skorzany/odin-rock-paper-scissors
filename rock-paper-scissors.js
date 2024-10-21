@@ -5,7 +5,6 @@ function getComputerChoice() {
         [2, "scissors"],
     ]);
     const choice = Math.floor(Math.random()*choices.size);
-
     return choices.get(choice);
 }
 
@@ -60,11 +59,6 @@ function playRound(humanChoice, computerChoice) {
         ["scissors", "rsp"],
     ]);
 
-    while (humanChoice === null) {
-        alert("Your choice was invalid! Try again.");
-        humanChoice = getHumanChoice();
-    }
-
     const result = calculateResult(humanChoice, computerChoice, RULES);
     switch (result) {
         case -1:
@@ -78,8 +72,7 @@ function playRound(humanChoice, computerChoice) {
             break;
     }
 
-    console.warn(msg);
-    return result;
+    return [result, msg];
 }
 
 // // tests for playRound
@@ -96,12 +89,12 @@ function playGame() {
     let cpu_score = 0;
     let player_pick;
     let cpu_pick;
-    const ROUNDS = 5;
+    const WINCONDITION = 5;
 
     console.info("Welcome to the game of Rock, Paper, Scissors!");
-    console.info("The game will take 5 rounds, good luck!");
+    // console.info("The game will take 5 rounds, good luck!");
 
-    while (currentRound < ROUNDS) {
+    while (player_score != WINCONDITION || cpu_score != WINCONDITION) {
         console.info(`Round ${++currentRound}`);
         player_pick = getHumanChoice();
         cpu_pick = getComputerChoice();
@@ -119,4 +112,65 @@ function playGame() {
 }
 
 
-playGame();
+// playGame();
+
+function main() {
+    const controls = document.querySelector("div");
+    const spans = document.querySelectorAll("span");
+    const WINCONDITION = 5;
+
+    let [round, msg, score1, score2] = [...spans];
+    let [currentRound, myScore, cpuScore] = [0, 0, 0];
+    let output;
+    console.log('po zmiennych');
+
+    controls.addEventListener("click", (event) => {
+        currentRound += 1;
+        console.log('w listenerze');
+        let target = event.target;
+
+        switch(target.textContent) {
+            case "Rock":
+                output = playRound("rock", getComputerChoice());
+                break;
+            case "Paper":
+                output = playRound("paper", getComputerChoice());
+                break;
+            case "Scissors":
+                output = playRound("scissors", getComputerChoice());
+                break;
+        }
+        round.textContent = currentRound;
+        msg.textContent = output[1];
+        switch(output[0]) {
+            case -1:
+                cpuScore += 1;
+                break;
+            case 1:
+                myScore += 1;
+                break;
+        }
+        score1.textContent = myScore;
+        score2.textContent = cpuScore;
+        if (Math.max(myScore, cpuScore) === WINCONDITION) {
+            const prompt = document.createElement("p");
+            prompt.innerText = "The game has ended. Thank you for playing! Refresh the page to start again.";
+            document.body.appendChild(prompt);
+            console.log('w ostatnim ifie');
+        };
+    });
+    console.log('za listenerem');
+}
+
+main();
+
+// playgame {
+//     wybierz wszystkie spany
+//     ustaw zmienne na wartosci spanow
+//     dodaj listener na diva z wyborem
+//     petla dopoki winik to nie 5
+//         zwieksz runde o 1 i wyswietl
+//         odczytaj klik i podaj wynik
+//     usun listener z diva
+//     wyswietl info o koncu gry
+// }
