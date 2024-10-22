@@ -42,12 +42,11 @@ function main() {
 
     const controls = document.querySelector("div");
     controls.setAttribute("style", "font-weight: bold;");
-    // console.log(controls.style.cssText);
 
     const spans = document.querySelectorAll("span");
     const [roundNumber, roundResult, myScore, cpuScore] = [...spans];
 
-    document.addEventListener("click", (event) => {
+    const playGame = (event) => {
         let target = event.target;
         let roundOutcome = null;
         switch(target.id) {
@@ -76,7 +75,7 @@ function main() {
         }
         if (Math.max(+myScore.textContent, +cpuScore.textContent) === 5) {
             const prompt = document.createElement("p");
-            prompt.textContent = "Thank you for playing! Game made by Skorzany.";
+            prompt.innerHTML = "Thank you for playing! Game made by <b>Skorzany</b>.";
             document.body.appendChild(prompt);
 
             const finalControls = document.createElement("div");
@@ -91,8 +90,11 @@ function main() {
             finalControls.appendChild(finalMsg);
             finalControls.appendChild(finalButton);
             controls.replaceWith(finalControls);
+            document.removeEventListener("click", playGame);
+            finalButton.addEventListener("click", () => location.reload());
         }
-    })
+    }
+    document.addEventListener("click", playGame);
 }
 
 main();
