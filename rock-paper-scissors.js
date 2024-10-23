@@ -4,7 +4,7 @@ function getComputerChoice() {
         [1, "paper"],
         [2, "scissors"],
     ]);
-    const choice = Math.floor(Math.random()*choices.size);
+    const choice = Math.floor(Math.random() * choices.size);
     return choices.get(choice);
 }
 
@@ -21,6 +21,9 @@ function playRound(humanChoice, computerChoice) {
         ["scissors", "rsp"],
     ]);
 
+    if (!(RULES.has(humanChoice))) return;
+
+    let msg;
     const result = calculateResult(humanChoice, computerChoice, RULES);
     switch (result) {
         case -1:
@@ -47,24 +50,15 @@ function main() {
     const [roundNumber, roundResult, myScore, cpuScore] = [...spans];
 
     const playGame = (event) => {
-        let target = event.target;
-        let roundOutcome = null;
-        switch(target.id) {
-            case "rock":
-                roundOutcome = playRound("rock", getComputerChoice());
-                break;
-            case "paper":
-                roundOutcome = playRound("paper", getComputerChoice());
-                break;
-            case "scissors":
-                roundOutcome = playRound("scissors", getComputerChoice());
-                break;
-        }
+        const WINCONDITION = 5;     //how many points are required to win the game, positive int ONLY
+        const target = event.target;
+        const roundOutcome = playRound(target.id, getComputerChoice());
+
         if (roundOutcome) {
             const [winner, message] = [...roundOutcome];
             roundNumber.textContent = +roundNumber.textContent + 1;
             roundResult.textContent = message;
-            switch(winner) {
+            switch (winner) {
                 case -1:
                     cpuScore.textContent = +cpuScore.textContent + 1;
                     break;
@@ -73,7 +67,7 @@ function main() {
                     break;
             }
         }
-        if (Math.max(+myScore.textContent, +cpuScore.textContent) === 5) {
+        if (Math.max(+myScore.textContent, +cpuScore.textContent) === WINCONDITION) {
             const prompt = document.createElement("p");
             prompt.innerHTML = "Thank you for playing! Game made by <b>Skorzany</b>.";
             document.body.appendChild(prompt);
